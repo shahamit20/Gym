@@ -35,7 +35,7 @@ function App() {
   return (
     <>
       {/* <Navbver /> */}
-      <Routes>
+      <Routes >
         <Route path="/" element={<Home />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/Calories" element={<Calories />} />
