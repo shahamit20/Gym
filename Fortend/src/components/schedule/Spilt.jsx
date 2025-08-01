@@ -1,5 +1,4 @@
-import { split } from 'postcss/lib/list'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
 function Spilt() {
 
@@ -75,8 +74,10 @@ function Spilt() {
     },
     {
       name: "bro_split",
-      data: [{
-        chest_day: [{
+      data: [
+    {
+      chest_day: [
+        {
           workout: "chest focused day",
           exercises: [
             "Barbell Bench Press",
@@ -84,10 +85,12 @@ function Spilt() {
             "Cable Fly",
             "Pushups"
           ]
-        }]
-      },
-      {
-        back_day: [{
+        }
+      ]
+    },
+    {
+      back_day: [
+        {
           workout: "back focused day",
           exercises: [
             "Deadlift",
@@ -95,8 +98,66 @@ function Spilt() {
             "Barbell Row",
             "Seated Cable Row"
           ]
-        }]
-      }]
+        }
+      ]
+    },
+    {
+      leg_day: [
+        {
+          workout: "leg focused day",
+          exercises: [
+            "Back Squat",
+            "Romanian Deadlift",
+            "Leg Press",
+            "Lunges",
+            "Standing Calf Raise"
+          ]
+        }
+      ]
+    },
+    {
+      shoulder_day: [
+        {
+          workout: "shoulder focused day",
+          exercises: [
+            "Overhead Press",
+            "Lateral Raise",
+            "Front Raise",
+            "Rear Delt Fly",
+            "Shrugs"
+          ]
+        }
+      ]
+    },
+    {
+      arm_day: [
+        {
+          workout: "arm focused day",
+          exercises: [
+            "Barbell Curl",
+            "Tricep Rope Pushdown",
+            "Dumbbell Hammer Curl",
+            "Skull Crushers",
+            "Concentration Curl"
+          ]
+        }
+      ]
+    },
+    {
+      core_day: [
+        {
+          workout: "core focused day",
+          exercises: [
+            "Plank",
+            "Hanging Leg Raises",
+            "Russian Twists",
+            "Cable Crunches",
+            "Bicycle Crunches"
+          ]
+        }
+      ]
+    }
+  ]
     },
     {
       name: "upper_lower",
@@ -281,9 +342,8 @@ function Spilt() {
 
   ];
 
-
-
   const [openIndexes, setOpenIndexes] = useState({});
+  const [selectedSplit, setSelectedSplit] = useState(null); // Track selected split
 
   const toggleIndex = (idx) => {
     setOpenIndexes((prev) => ({
@@ -292,64 +352,127 @@ function Spilt() {
     }));
   };
 
+  const handleSelect = (splitName) => {
+    setSelectedSplit(splitName);
+
+    // Get selected full data first
+    const selectedData = split.find((item) => item.name === splitName);
+
+    if (!selectedData) {
+      console.warn("❌ Split not found");
+      return;
+    }
+
+    // Build 'days' array for backend
+    const days = selectedData.data.map((dayObj) => {
+      const [dayName, workouts] = Object.entries(dayObj)[0];
+      return {
+        dayName,
+        workouts,
+      };
+    });
+
+    // 👇 Send to backend
+    fetch('http://localhost:3000/schedule/split', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        splitName: selectedData.name,
+        days,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("✅ Backend Response:", data.message);
+      })
+      .catch((err) => {
+        console.error("❌ Error saving split:", err);
+      });
+
+    // ✅ Log full structure in console
+    console.log("👉 Selected Split Name:", selectedData.name);
+    console.log("📋 Full Workout Details:");
+
+    selectedData.data.forEach((dayObj) => {
+      const [dayName, dayValue] = Object.entries(dayObj)[0];
+      console.log(`\n🗓️  ${dayName.toUpperCase()}:`);
+
+      dayValue.forEach((day) => {
+        console.log(`➡️ Workout: ${day.workout}`);
+        console.log("🏋️ Exercises:");
+        day.exercises.forEach((ex, index) => {
+          console.log(`   ${index + 1}. ${ex}`);
+        });
+      });
+    });
+  };
 
 
   return (
-  <div className='p-5 pl-[5rem] h-[25rem] overflow-y-auto border mt-10 flex flex-col'>
-    <h1 className='text-5xl font-extrabold mb-5'>Select Your Prefect Split</h1>
-    {split.map((splitItem, idx) => (
-      <div key={idx} className='mb-5'>
-        <div className='w-[95%] h-auto border pl-2 flex justify-between rounded-lg'>
-          <div>
-            <h1 className='font-bold text-2xl'>{splitItem.name}</h1>
-            <p className='text-gray-400'>Workout split for {splitItem.name.replaceAll('_', ' ')}</p>
-          </div>
-          <div className='w-[3rem] bg-gray-200 flex justify-center items-center rounded-tr-lg rounded-br-lg' onClick={() => toggleIndex(idx)}>
-            <i className="fa-solid fa-angle-down text-2xl" ></i>
-          </div>
-        </div>
+    <div className="p-5 pl-[5rem] h-[25rem] overflow-y-auto border mt-10 flex flex-col">
+      <h1 className="text-5xl font-extrabold mb-5">Select Your Perfect Split</h1>
+      {split.map((splitItem, idx) => (
+        <div key={idx} className="mb-5">
+          <div
+            className={`w-[95%] h-auto border pl-2 flex justify-between items-center rounded-lg ${selectedSplit === splitItem.name ? 'border-indigo-500 bg-indigo-50' : ''
+              }`}
+          >
+            <div>
+              <h1 className="font-bold text-2xl capitalize">{splitItem.name.replaceAll('_', ' ')}</h1>
+              <p className="text-gray-400">
+                Workout split for {splitItem.name.replaceAll('_', ' ')}
+              </p>
+            </div>
 
-        {openIndexes[idx] && (<div className='w-[95%] h-auto border p-2 flex justify-evenly rounded-bl-lg rounded-br-lg'>
-          {Array.isArray(splitItem.data)
-            ? splitItem.data.map((dayObj, i) => (
-              <div key={i} className='mb-3'>
-                {Object.entries(dayObj).map(([dayName, workouts], j) => (
-                  <div key={j}>
-                    <h2 className="text-xl font-semibold capitalize mt-2">{dayName}</h2>
-                    {workouts.map((workout, k) => (
-                      <div key={k}>
-                        <p className="font-medium mt-1">{workout.workout}</p>
-                        <ul className='list-disc ml-5 text-gray-600'>
-                          {workout.exercises.map((exercise, l) => (
-                            <li key={l}>{exercise}</li>
-                          ))}
-                        </ul>
+            <div className="flex items-center gap-2 pr-2">
+              <button
+                className={`px-3 py-1 text-sm rounded-md font-medium ${selectedSplit === splitItem.name
+                  ? 'bg-indigo-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-indigo-500 hover:text-white'
+                  }`}
+                onClick={() => handleSelect(splitItem.name)}
+              >
+                {selectedSplit === splitItem.name ? 'Selected' : 'Select'}
+              </button>
+
+              <div
+                className="w-[2.5rem] h-[2.5rem] bg-gray-200 flex justify-center items-center rounded-full cursor-pointer"
+                onClick={() => toggleIndex(idx)}
+              >
+                <i className="fa-solid fa-angle-down text-lg" />
+              </div>
+            </div>
+          </div>
+
+          {openIndexes[idx] && (
+            <div className="w-[95%] h-auto border p-2 flex flex-wrap justify-evenly rounded-bl-lg rounded-br-lg">
+              {Array.isArray(splitItem.data)
+                ? splitItem.data.map((dayObj, i) => (
+                  <div key={i} className="mb-3 w-full sm:w-[45%]">
+                    {Object.entries(dayObj).map(([dayName, workouts], j) => (
+                      <div key={j}>
+                        <h2 className="text-xl font-semibold capitalize mt-2">{dayName}</h2>
+                        {workouts.map((workout, k) => (
+                          <div key={k}>
+                            <p className="font-medium mt-1">{workout.workout}</p>
+                            <ul className="list-disc ml-5 text-gray-600">
+                              {workout.exercises.map((exercise, l) => (
+                                <li key={l}>{exercise}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
                       </div>
                     ))}
                   </div>
-                ))}
-              </div>
-            ))
-            : Object.entries(splitItem.data).map(([dayName, workouts], j) => (
-              <div key={j} className='mb-3'>
-                <h2 className="text-xl font-semibold capitalize mt-2">{dayName}</h2>
-                {workouts.map((workout, k) => (
-                  <div key={k}>
-                    <p className="font-medium mt-1">{workout.workout}</p>
-                    <ul className='list-disc ml-5 text-gray-600'>
-                      {workout.exercises.map((exercise, l) => (
-                        <li key={l}>{exercise}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            ))}
-        </div>)}
-      </div>
-    ))}
-  </div>
-  )
+                ))
+                : null}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 }
 
-export default Spilt
+export default Spilt;

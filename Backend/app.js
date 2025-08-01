@@ -9,11 +9,12 @@ var authRouter = require('./routes/auth');
 var usersRouter = require('./model/users');
 var indexRouter = require('./routes/index');
 const passport = require('passport');
+const mongostore = require('connect-mongo')
 
 
 var app = express();
 app.use(cors({
-  origin: 'http://localhost:5173/Gym',
+  origin: 'http://localhost:5173',
   credentials: true
 }));
 
@@ -26,9 +27,9 @@ app.use(expressSessoin({
   resave:false,
   saveUninitialized: false,
   secret:'hello secret',
+  store: mongostore.create({mongoUrl: 'mongodb://127.0.0.1:27017/Fitness', collectionName : 'session'}),
    cookie: {
-    sameSite: 'lax',
-    secure: false, // set true in production (HTTPS)
+    maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }))
 

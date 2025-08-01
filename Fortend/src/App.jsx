@@ -11,26 +11,27 @@ import User from './components/Dashboard/User';
 function App() {
   const [data, setData] = useState(null);
   const location = useLocation(); // 👈 get current route
+  const [email, setEmail] = useState(''); 
 
- useEffect(() => {
-  const fetchData = async () => {
-    const validPaths = ['/', '/schedule', '/Calories' , '/login', '/register']; // Only fetch for these
-    const path = location.pathname === '/' ? '' : location.pathname;
+  useEffect(() => {
+    const fetchData = async () => {
+      const validPaths = ['/', '/schedule', '/Calories', '/login', '/register']; // Only fetch for these
+      const path = location.pathname === '/' ? '' : location.pathname;
 
-    if (!validPaths.includes(location.pathname)) return;
+      if (!validPaths.includes(location.pathname)) return;
 
-    try {
-      const res = await fetch(`http://localhost:3000${path}`);
-      const json = await res.json();
-      setData(json.message);
-      console.log('Fetched from backend:', json.message);
-    } catch (error) {
-      console.error('Failed to fetch:', error.message);
-    }
-  };
+      try {
+        const res = await fetch(`http://localhost:3000${path}`);
+        const json = await res.json();
+        setData(json.message);
+        console.log('Fetched from backend:', json.message);
+      } catch (error) {
+        console.error('Failed to fetch:', error.message);
+      }
+    };
 
-  fetchData();
-}, [location]);
+    fetchData();
+  }, [location]);
 
   return (
     <>
@@ -41,7 +42,7 @@ function App() {
         <Route path="/Calories" element={<Calories />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<User/>} />
+        <Route path="/dashboard" element={<User />} />
       </Routes>
     </>
   );

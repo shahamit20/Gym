@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
-mongoose.connect("mongodb://127.0.0.1:27017/Fitness")
-// Define the schema
-const userSchema = new mongoose.Schema({
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+mongoose.connect(process.env.Mongodb)
+  
+const userSchema = new mongoose.Schema({ 
   fullname:{
     type:String
   },
@@ -38,7 +42,8 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  workout:[]
 });
 
 userSchema.plugin(passportLocalMongoose)

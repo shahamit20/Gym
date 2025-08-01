@@ -48,7 +48,7 @@ export default function Register() {
     <div className="relative w-full h-screen bg-black/40">
       {/* Background Image */}
       <img
-        src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&auto=format&fit=crop&q=60"
+        src="https://images.unsplash.com/photo-1535743686920-55e4145369b9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGd5bXxlbnwwfDB8MHx8fDA%3D"
         alt="Fitness Background"
         className="absolute w-full h-full object-cover -z-10"
       />

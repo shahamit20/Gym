@@ -1,28 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-const data = {
-    "Rice": 158,
-    "Boiled Egg": 78,
-    "Oats": 389,
-    "Banana": 105,
-    "Milk": 150,
-    "Peanut Butter": 190,
-    "Brown Rice": 111,
-    "Chicken Breast": 165,
-    "Chapati": 104,
-    "Apple": 95,
-    "Green Salad": 33,
-    "Almonds": 576,
-    "Curd": 98,
-    "Paneer": 265,
-    "Tofu": 144,
-    "Moong Dal": 105,
-    "Chana": 364,
-    "Sweet Potato": 86,
-    "Shanwick": 155
-}
-
-
 function Diet_Plan() {
 
 
@@ -32,6 +9,7 @@ function Diet_Plan() {
     const [count, setCount] = useState({});
     const [addfood, setAddfood] = useState(false);
     const [mealType, setMealType] = useState(true);
+
     const [meal, setmeal] = useState({
         breakfast: [],
         lunch: [],
@@ -49,25 +27,25 @@ function Diet_Plan() {
     }, [count]);
 
 
-   const add = (type, index) => {
-  setCount(prev => ({
-    ...prev,
-    [type]: {
-      ...prev[type],
-      [index]: (prev[type]?.[index] || 1) + 1,
-    }
-  }));
-};
+    const add = (type, index) => {
+        setCount(prev => ({
+            ...prev,
+            [type]: {
+                ...prev[type],
+                [index]: (prev[type]?.[index] || 1) + 1,
+            }
+        }));
+    };
 
-const remove = (type, index) => {
-  setCount(prev => ({
-    ...prev,
-    [type]: {
-      ...prev[type],
-      [index]: prev[type]?.[index] > 1 ? prev[type][index] - 1 : 1,
-    }
-  }));
-};
+    const remove = (type, index) => {
+        setCount(prev => ({
+            ...prev,
+            [type]: {
+                ...prev[type],
+                [index]: prev[type]?.[index] > 1 ? prev[type][index] - 1 : 1,
+            }
+        }));
+    };
 
 
 
@@ -85,38 +63,46 @@ const remove = (type, index) => {
         Object.entries(meal).forEach(([key, value]) => {
             localStorage.setItem(key, JSON.stringify(value));
         });
+
     }, [meal]);
 
 
-    const Item = async() => {
+    const Item = async () => {
         const input = foodName;
         const formatted = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
-        // try{
-        //       const n = await fetch("http://localhost:3000/",{method:"POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ formatted }),})
-        // const res = await n.text()
-        // console.log(formatted, res);
-        // }catch{
-        //     console.log("err")
-        // }
-      
+        try {
+            const response = await fetch("http://localhost:3000/schedule/food_calorie", {
+                method: "POST", // ✅ POST method se data bhejte hain
+                headers: { "Content-Type": "application/json", },
+                body: JSON.stringify({ formatted, amount })
+            });
 
 
-        const newfood = {
-            name: foodName,
-            Amount: amount,
-            Unit: unit,
-            calroies: data[formatted],
+            const resJson = await response.json();           // ✅ parse as JSON
+            const cal = parseInt(resJson);     // ✅ convert to int
+            console.log("Server se response:", cal);
+
+
+
+            const newfood = {
+                name: foodName,
+                Amount: amount,
+                Unit: unit,
+                calroies: cal,
+            }
+            setAddfood("")
+            setFoodName("")
+            setAmount("")
+            setCount("")
+            setUnit("")
+            setAddfood(false)
+            setmeal(prev => ({
+                ...prev,
+                [mealType]: [...prev[mealType], newfood]
+            }));
+        } catch (err) {
+            console.error("Error:", err);
         }
-        setAddfood("")
-        setFoodName("")
-        setAmount("")
-        setCount("")
-        setUnit("")
-        setAddfood(false)
-        setmeal(prev => ({
-            ...prev,
-            [mealType]: [...prev[mealType], newfood]
-        }));
 
     };
 
@@ -124,7 +110,20 @@ const remove = (type, index) => {
         setAddfood(false)
     }
 
+    const deleteItem = (type, index) => {
+    const updatedMeal = { ...meal };
+    const updatedCount = { ...count };
 
+    // Safety check: initialize as arrays if undefined
+    updatedMeal[type] = Array.isArray(updatedMeal[type]) ? [...updatedMeal[type]] : [];
+    updatedCount[type] = Array.isArray(updatedCount[type]) ? [...updatedCount[type]] : [];
+
+    updatedMeal[type].splice(index, 1);       // Remove the food item
+    updatedCount[type].splice(index, 1);      // Remove its count too
+
+    setmeal(updatedMeal);
+    setCount(updatedCount);
+};
 
     const Mealcard = ({ title, icon, type }) => (
         <div className='w-[20rem] h-[90%]  border rounded-xl border-yellow-300 relative flex flex-col justify-center items-center '>
@@ -153,15 +152,19 @@ const remove = (type, index) => {
                             </div>
                         </div>
                         <div className='w-[95%] border'></div>
-                        <div className='w-[100%] h-[8rem]  flex justify-between items-center'>
-
+                        <div className='w-[100%] h-[8rem] flex justify-between items-center'>
                             <div key={index} className='flex gap-2 ml-3'>
-                                <i className="fa-solid fa-minus  p-1.5 rounded-full bg-red-200 text-red-600 cursor-pointer" onClick={() => remove(type, index)}></i>
+                                <i className="fa-solid fa-minus p-1.5 rounded-full bg-red-200 text-red-600 cursor-pointer" onClick={() => remove(type, index)}></i>
                                 <h3>{count[type]?.[index] || 1}x</h3>
-                                <i className="fa-solid fa-plus  p-1.5 rounded-full bg-green-200 text-green-600 cursor-pointer" onClick={() => add(type, index)}></i>
+                                <i className="fa-solid fa-plus p-1.5 rounded-full bg-green-200 text-green-600 cursor-pointer" onClick={() => add(type, index)}></i>
                             </div>
-                            <div className='mr-3'>
-                                <h1 className='text-xl mt-2'>{product.calroies} <span className='text-gray-500'>cal</span></h1>
+                            <div className='flex gap-2 items-center mr-3'>
+                                {/* <h1 className='text-xl mt-2'>{product.calroies} <span className='text-gray-500'>cal</span></h1> */}
+                                <i
+                                    className="fa-solid fa-xmark text-red-500 text-xl cursor-pointer hover:scale-125 transition-transform"
+                                    title="Remove item"
+                                    onClick={() => deleteItem(type, index)}
+                                ></i>
                             </div>
                         </div>
                     </div>
@@ -223,10 +226,10 @@ const remove = (type, index) => {
                     </button>
                 </div>}
 
-                <Mealcard title="Breakfast" icon="fa-mug-hot" type="breakfast" />
-                <Mealcard title="Lunch" icon="fa-utensils" type="lunch" />
-                <Mealcard title="Snacks" icon="fa-cookie-bite" type="snack" />
-                <Mealcard title="Dinner" icon="fa-bowl-rice" type="dinner" />
+                <Mealcard title="Breakfast" icon="fa-mug-hot" type="breakfast" deleteItem={deleteItem}  />
+                <Mealcard title="Lunch" icon="fa-utensils" type="lunch" deleteItem={deleteItem} />
+                <Mealcard title="Snacks" icon="fa-cookie-bite" type="snack" deleteItem={deleteItem} />
+                <Mealcard title="Dinner" icon="fa-bowl-rice" type="dinner" deleteItem={deleteItem} />
 
             </div>
         </>

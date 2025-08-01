@@ -2,6 +2,7 @@ import React from 'react'
 import Traning from './Traning'
 import Sport from '../../home/Sport'
 import Athlete_diet from './Athlete_diet'
+import Athleteplan from './Athleteplan'
 
 function Athlete() {
     return (
@@ -23,6 +24,8 @@ function Athlete() {
             <Traning/>
             <Sport/>
             <Athlete_diet />
+             <Athleteplan />
+            
         </div>
 
         </>

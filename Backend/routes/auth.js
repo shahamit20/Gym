@@ -22,6 +22,7 @@ router.post('/register', async (req, res) => {
       age: req.body.age,
       gender: req.body.gender,
       fitnessGoal: req.body.fitnessGoal,
+      Workout:[]
     });
     users.register(userdata, req.body.password, (err, registeredUser) => {
       if (err) {
@@ -76,6 +77,11 @@ router.post('/login', (req, res, next) => {
 
         console.log("Full user info:", fullUser);
 
+        res.cookie('lastLoginEmail', req.user.email, {
+          httpOnly: false, // frontend access ke liye
+          // ❌ No maxAge or expires — this makes it a persistent cookie
+        });
+
         return res.status(200).json({ message: "Login successful", user: fullUser });
       } catch (error) {
         console.error("Error finding user by email:", error);
@@ -86,6 +92,8 @@ router.post('/login', (req, res, next) => {
 });
 
 router.get('/dashboard', async (req, res) => {
+  console.log(req.user)
+  console.log(req.session)
   if (req.isAuthenticated()) {
     try {
       const user = await users.findOne({ email: req.user.email }).select('-hash -salt');
@@ -99,13 +107,30 @@ router.get('/dashboard', async (req, res) => {
 });
 
 
-router.get('/logout', (req, res, next) => {
-  req.logout(function (err) {
-    if (err) return next(err);
-    res.status(200).json({ message: 'Logged out successfully' });
-  });
-});
+// router.get('/logout', (req, res, next) => {
+//   req.logout(function (err) {
+//     if (err) return next(err);
+//     res.status(200).json({ message: 'Logged out successfully' });
+//   });
+// });
 
+router.get('/logout',(req,res)=>{
+      req.logout(function (err) {
+    if (err) return next(err);
+
+    // Destroy session after logout
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error destroying session' });
+      }
+
+      // Optionally clear the cookie from browser
+      res.clearCookie('connect.sid');
+
+      return res.status(200).json({ message: 'Logged out successfully' });
+    });
+  });
+})
 
 
 // ✅ PROTECTED ROUTE MIDDLEWARE
