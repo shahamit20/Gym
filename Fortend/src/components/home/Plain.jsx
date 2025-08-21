@@ -1,6 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 function Plain() {
+    const navigate=useNavigate()
     return (
         <>
             <motion.div initial={{opacity:0 , y:100}} whileInView={{opacity:1, y:0}} transition={{duration:0.5,delay:0.3}} viewport={{once:true}} className="border h-auto md:h-[30rem] bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 mx-4 md:mx-[5rem] rounded-2xl shadow-2xl flex flex-col md:flex-row justify-between items-center p-6 md:p-10">
@@ -25,7 +27,7 @@ function Plain() {
                         <strong>Next Workout:</strong> <span className="text-black">Legs & Core Day</span>
                     </div>
 
-                    <button className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition duration-300">
+                    <button className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition duration-300" onClick={()=> navigate("/schedule")}>
                         View Full Plan
                     </button>
                 </div>

@@ -21,7 +21,7 @@ function Userinfo() {
             .then(res => res.json())
             .then(data => {
                 console.log(data.message);
-                navigate('/login'); // ✅ Redirect to login
+                navigate('/'); // ✅ Redirect to login
             })
             .catch(err => {
                 console.error('Logout error:', err);

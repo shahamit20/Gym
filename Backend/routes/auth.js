@@ -3,6 +3,7 @@ const router = express.Router();
 var users = require('../model/users')
 var index = require('./index');
 var schedule = require('./schedule');
+var gym = require('./gym')
 const passport = require('passport');
 var localstrategy = require("passport-local");
 passport.use(new localstrategy({ usernameField: 'email' }, users.authenticate()));
@@ -11,6 +12,7 @@ passport.use(new localstrategy({ usernameField: 'email' }, users.authenticate())
 
 router.use('/', index);
 router.use('/schedule', schedule);
+router.use('/gym',gym)
 
 
 router.post('/register', async (req, res) => {

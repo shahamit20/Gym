@@ -37,7 +37,7 @@ const Navber = () => {
               className={`p-1 rounded-xl text-black 
                 ${isActive("/schedule") ? "underline underline-offset-4 decoration-red-500" : ""}
                 hover:underline hover:underline-offset-4 hover:decoration-red-500`}
-              onClick={() => navigate("/schedule")}
+              onClick={() => navigate("/schedule/workout")}
             >
               Schedule
             </motion.li>
@@ -73,7 +73,7 @@ const Navber = () => {
                     className="px-4 py-2 hover:bg-gray-100"
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate("/gym-group");
+                      navigate("/gym");
                     }}
                   >
                     Gym Group

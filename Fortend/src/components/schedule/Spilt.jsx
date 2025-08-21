@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 function Spilt() {
 
-  const split = [
+    const split = [
     {
       name: "push_pull_leg",
       data: [{
@@ -75,89 +75,89 @@ function Spilt() {
     {
       name: "bro_split",
       data: [
-    {
-      chest_day: [
         {
-          workout: "chest focused day",
-          exercises: [
-            "Barbell Bench Press",
-            "Incline Dumbbell Press",
-            "Cable Fly",
-            "Pushups"
+          chest_day: [
+            {
+              workout: "chest focused day",
+              exercises: [
+                "Barbell Bench Press",
+                "Incline Dumbbell Press",
+                "Cable Fly",
+                "Pushups"
+              ]
+            }
+          ]
+        },
+        {
+          back_day: [
+            {
+              workout: "back focused day",
+              exercises: [
+                "Deadlift",
+                "Pull Ups",
+                "Barbell Row",
+                "Seated Cable Row"
+              ]
+            }
+          ]
+        },
+        {
+          leg_day: [
+            {
+              workout: "leg focused day",
+              exercises: [
+                "Back Squat",
+                "Romanian Deadlift",
+                "Leg Press",
+                "Lunges",
+                "Standing Calf Raise"
+              ]
+            }
+          ]
+        },
+        {
+          shoulder_day: [
+            {
+              workout: "shoulder focused day",
+              exercises: [
+                "Overhead Press",
+                "Lateral Raise",
+                "Front Raise",
+                "Rear Delt Fly",
+                "Shrugs"
+              ]
+            }
+          ]
+        },
+        {
+          arm_day: [
+            {
+              workout: "arm focused day",
+              exercises: [
+                "Barbell Curl",
+                "Tricep Rope Pushdown",
+                "Dumbbell Hammer Curl",
+                "Skull Crushers",
+                "Concentration Curl"
+              ]
+            }
+          ]
+        },
+        {
+          core_day: [
+            {
+              workout: "core focused day",
+              exercises: [
+                "Plank",
+                "Hanging Leg Raises",
+                "Russian Twists",
+                "Cable Crunches",
+                "Bicycle Crunches"
+              ]
+            }
           ]
         }
       ]
-    },
-    {
-      back_day: [
-        {
-          workout: "back focused day",
-          exercises: [
-            "Deadlift",
-            "Pull Ups",
-            "Barbell Row",
-            "Seated Cable Row"
-          ]
-        }
-      ]
-    },
-    {
-      leg_day: [
-        {
-          workout: "leg focused day",
-          exercises: [
-            "Back Squat",
-            "Romanian Deadlift",
-            "Leg Press",
-            "Lunges",
-            "Standing Calf Raise"
-          ]
-        }
-      ]
-    },
-    {
-      shoulder_day: [
-        {
-          workout: "shoulder focused day",
-          exercises: [
-            "Overhead Press",
-            "Lateral Raise",
-            "Front Raise",
-            "Rear Delt Fly",
-            "Shrugs"
-          ]
-        }
-      ]
-    },
-    {
-      arm_day: [
-        {
-          workout: "arm focused day",
-          exercises: [
-            "Barbell Curl",
-            "Tricep Rope Pushdown",
-            "Dumbbell Hammer Curl",
-            "Skull Crushers",
-            "Concentration Curl"
-          ]
-        }
-      ]
-    },
-    {
-      core_day: [
-        {
-          workout: "core focused day",
-          exercises: [
-            "Plank",
-            "Hanging Leg Raises",
-            "Russian Twists",
-            "Cable Crunches",
-            "Bicycle Crunches"
-          ]
-        }
-      ]
-    }
-  ]
     },
     {
       name: "upper_lower",
@@ -345,67 +345,14 @@ function Spilt() {
   const [openIndexes, setOpenIndexes] = useState({});
   const [selectedSplit, setSelectedSplit] = useState(null); // Track selected split
 
-  const toggleIndex = (idx) => {
+  const toggleIndex = (idx, splitName) => {
+    setSelectedSplit((prev) => (prev === splitName ? null : splitName));
     setOpenIndexes((prev) => ({
       ...prev,
       [idx]: !prev[idx],
     }));
   };
 
-  const handleSelect = (splitName) => {
-    setSelectedSplit(splitName);
-
-    // Get selected full data first
-    const selectedData = split.find((item) => item.name === splitName);
-
-    if (!selectedData) {
-      console.warn("❌ Split not found");
-      return;
-    }
-
-    // Build 'days' array for backend
-    const days = selectedData.data.map((dayObj) => {
-      const [dayName, workouts] = Object.entries(dayObj)[0];
-      return {
-        dayName,
-        workouts,
-      };
-    });
-
-    // 👇 Send to backend
-    fetch('http://localhost:3000/schedule/split', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        splitName: selectedData.name,
-        days,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("✅ Backend Response:", data.message);
-      })
-      .catch((err) => {
-        console.error("❌ Error saving split:", err);
-      });
-
-    // ✅ Log full structure in console
-    console.log("👉 Selected Split Name:", selectedData.name);
-    console.log("📋 Full Workout Details:");
-
-    selectedData.data.forEach((dayObj) => {
-      const [dayName, dayValue] = Object.entries(dayObj)[0];
-      console.log(`\n🗓️  ${dayName.toUpperCase()}:`);
-
-      dayValue.forEach((day) => {
-        console.log(`➡️ Workout: ${day.workout}`);
-        console.log("🏋️ Exercises:");
-        day.exercises.forEach((ex, index) => {
-          console.log(`   ${index + 1}. ${ex}`);
-        });
-      });
-    });
-  };
 
 
   return (
@@ -425,21 +372,15 @@ function Spilt() {
             </div>
 
             <div className="flex items-center gap-2 pr-2">
-              <button
-                className={`px-3 py-1 text-sm rounded-md font-medium ${selectedSplit === splitItem.name
-                  ? 'bg-indigo-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-indigo-500 hover:text-white'
-                  }`}
-                onClick={() => handleSelect(splitItem.name)}
-              >
-                {selectedSplit === splitItem.name ? 'Selected' : 'Select'}
-              </button>
 
               <div
                 className="w-[2.5rem] h-[2.5rem] bg-gray-200 flex justify-center items-center rounded-full cursor-pointer"
-                onClick={() => toggleIndex(idx)}
+                onClick={() => toggleIndex(idx, splitItem.name)} // 👈 pass name also
               >
-                <i className="fa-solid fa-angle-down text-lg" />
+                <i
+                  className={`fa-solid fa-angle-down text-lg transform transition-transform duration-300 ${openIndexes[idx] ? "rotate-180" : ""
+                    }`}
+                />
               </div>
             </div>
           </div>

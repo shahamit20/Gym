@@ -6,6 +6,7 @@ import Advance from './freeplan/Advance';
 import { motion } from 'framer-motion';
 import Spilt from './Spilt';
 import { setlocalstorage } from '../../storage/Plandata';
+import Navber from '../../other/Navber';
 
 
 function Workout() {
@@ -34,6 +35,7 @@ function Workout() {
 
     return (
         <>
+
 
             <h1 className='text-center text-3xl font-bold'>Workout plan </h1>
             <p className='text-center text-2xl text-gray-500 mt-2'>Personalize your fitness journey with a workout plan tailored to your goals and schedule.</p>

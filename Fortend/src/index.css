@@ -10,9 +10,6 @@ body::-webkit-scrollbar{
     display: none;
 }
 
-#item::-webkit-scrollbar{
-    display: none;
-}
 .input::-webkit-inner-spin-button{
     appearance: none;
 }

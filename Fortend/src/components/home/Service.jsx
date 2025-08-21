@@ -1,7 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import Workout from '../schedule/Workout'
+import { useNavigate } from 'react-router-dom';
 
 function Service() {
+    const navigate = useNavigate();
   return (
     <>
       <div className='w-[100%] pb-5 pt-5 mt-[10rem] flex justify-evenly items-center'>
@@ -66,7 +69,9 @@ function Service() {
             className='w-[20rem] h-[22rem] border rounded-2xl bg-cover flex flex-col justify-between p-2'>
 
 
-            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'><i className="fa-solid fa-plus text-white text-xl"></i></motion.div>
+            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'>
+              <i className="fa-solid fa-plus text-white text-xl"   onClick={() => navigate("schedule/workout")}></i>
+              </motion.div>
 
 
             <div>
@@ -82,7 +87,8 @@ function Service() {
               backgroundImage: `url(${"https://images.unsplash.com/photo-1633339409275-84fb9541ab88?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGRpZXQlMjBneW18ZW58MHx8MHx8fDA%3D"})`
             }}
             className='w-[20rem] h-[22rem] border rounded-2xl bg-cover flex flex-col justify-between p-2'>
-            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'><i className="fa-solid fa-plus text-white text-xl"></i></motion.div>
+            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'>
+              <i className="fa-solid fa-plus text-white text-xl"  onClick={() => navigate("schedule/deitplan")} ></i></motion.div>
             <div>
               <h1 className='text-white text-3xl mb-2 cursor-pointer' style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Personalized Diet Plans</h1>
               <p className='text-white text-xl mb-1' style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Fuel your body right with meals tailored to your fitness goals.</p>
@@ -98,7 +104,8 @@ function Service() {
               backgroundImage: `url(${"https://images.unsplash.com/photo-1632378550595-53d41ca4ee72?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fEF0aGxldGUlMjBTcGVjaWFsJTIwV29ya291dHN8ZW58MHx8MHx8fDA%3D"})`
             }}
             className='w-[20rem] h-[22rem] border rounded-2xl bg-cover flex flex-col justify-between p-2'>
-            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'><i className="fa-solid fa-plus text-white text-xl"></i></motion.div>
+            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'>
+              <i className="fa-solid fa-plus text-white text-xl" onClick={() => navigate("schedule/athlete")}></i></motion.div>
             <div>
               <h1 className='text-white text-3xl mb-2 cursor-pointer text-shadow-lg' style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Athlete Training Program</h1>
               <p className='text-white text-xl mb-1' style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Train like a pro with high-performance routines built for speed, power, and agility.</p>
