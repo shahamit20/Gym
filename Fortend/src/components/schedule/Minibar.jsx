@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import Navber from '../../other/Navber';
+import Footer from '../../other/Footer';
 
 function Minibar() {
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ function Minibar() {
 
       {/* This renders the active route component */}
       <Outlet />
+      <Footer />
     </>
   );
 }

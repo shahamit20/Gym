@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navber from '../../other/Navber'
 import Explore from './Explore';
+import Footer from '../../other/Footer';
 
 function Gympage() {
   const [catogris, setCatogris] = useState("explore");
@@ -23,7 +24,7 @@ function Gympage() {
             {catogris == 'Add' && <div>Add</div>}
         </div>
       </div>
-
+    <Footer />
     </>
   )
 }

@@ -3,6 +3,7 @@ import Userinfo from './user/Userinfo'
 import Navber from '../../other/Navber'
 import Routine from './user/Routine'
 import Gym from './user/Gym'
+import Footer from '../../other/Footer'
 
 function User() {
   return (
@@ -12,6 +13,7 @@ function User() {
     <Userinfo />
     <Routine />
     <Gym />
+    <Footer />
     </div>
     </>
   )

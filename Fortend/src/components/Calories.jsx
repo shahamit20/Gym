@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navber from '../other/Navber'
 import { motion } from 'framer-motion';
+import Footer from '../other/Footer';
 
 function Calories() {
   const [formData, setFormData] = useState({
@@ -230,6 +231,8 @@ function Calories() {
 
 
       </div>
+
+      <Footer />
     </>
   )
 }
