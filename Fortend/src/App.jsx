@@ -26,7 +26,9 @@ function App() {
       if (!validPaths.includes(location.pathname)) return;
 
       try {
-        const res = await fetch(`http://localhost:3000${path}`);
+        const res = await fetch(`http://localhost:3000${path}`, {
+          credentials: 'include'
+        });
         const json = await res.json();
         setData(json.message);
         console.log('Fetched from backend:', json.message);

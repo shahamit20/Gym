@@ -88,7 +88,7 @@ function Service() {
             }}
             className='w-[20rem] h-[22rem] border rounded-2xl bg-cover flex flex-col justify-between p-2'>
             <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }} className='w-[2rem] h-[2rem] bg-black rounded-full flex justify-center items-center cursor-pointer'>
-              <i className="fa-solid fa-plus text-white text-xl"  onClick={() => navigate("schedule/deitplan")} ></i></motion.div>
+              <i className="fa-solid fa-plus text-white text-xl"  onClick={() => navigate("schedule/dietplan")} ></i></motion.div>
             <div>
               <h1 className='text-white text-3xl mb-2 cursor-pointer' style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Personalized Diet Plans</h1>
               <p className='text-white text-xl mb-1' style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Fuel your body right with meals tailored to your fitness goals.</p>

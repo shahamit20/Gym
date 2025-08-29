@@ -27,12 +27,14 @@ console.log("Static folder path:", path.join(__dirname, 'uploads'));
 app.use('/uploads', express.static(path.join(__dirname, 'Middleware', 'uploads')));
 
 app.use(expressSessoin({
-  resave:false,
+  resave: false,
   saveUninitialized: false,
-  secret:'hello secret',
-  store: mongostore.create({mongoUrl: 'mongodb://127.0.0.1:27017/Fitness', collectionName : 'session'}),
-   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7
+  secret: 'hello secret',
+  store: mongostore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/Fitness', collectionName: 'session' }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+    sameSite: 'lax'
   }
 }))
 
@@ -49,7 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', authRouter);
 app.use('/users', usersRouter);
-app.use('/index',indexRouter)
+app.use('/index', indexRouter)
 
 // catch 404 and forward to error handler
 // Handle 404 - Route Not Found

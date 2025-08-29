@@ -11,6 +11,31 @@ const bgImages = [
 const Banner = () => {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
+  const [check, setCheck] = useState(false);
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      const data = await res.json();
+      console.log("Fetched from backend:", data); // backend ka response
+      setCheck(data.message === true); // state update
+    } catch (err) {
+      console.error("Failed to fetch:", err);
+    }
+  };
+
+  fetchData();
+}, []);
+
+
+useEffect(() => {
+  console.log("check updated:", check);
+}, [check]);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,6 +64,7 @@ const Banner = () => {
           <p className="text-5xl text-white mb-8">Fit Mind, Fit Body, Fit Life.</p>
 
           {/* Buttons */}
+         {!check && (
           <div className="flex gap-6">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -48,7 +74,6 @@ const Banner = () => {
             >
               Login
             </motion.button>
-           
 
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -59,6 +84,7 @@ const Banner = () => {
               Register
             </motion.button>
           </div>
+        )}
         </div>
       </motion.div>
     </>

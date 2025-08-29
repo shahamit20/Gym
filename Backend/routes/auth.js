@@ -10,9 +10,11 @@ passport.use(new localstrategy({ usernameField: 'email' }, users.authenticate())
 
 
 
-router.use('/', index);
+// router.use('/', index);
 router.use('/schedule', schedule);
 router.use('/gym',gym)
+
+
 
 
 router.post('/register', async (req, res) => {
@@ -93,6 +95,12 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+router.get('/', isLoggedIn, (req, res) => {
+  console.log(req.user);
+  console.log(req.session);
+  res.json({ message: true }); // sirf login user ke liye
+});
+
 router.get('/dashboard', async (req, res) => {
   console.log(req.user)
   console.log(req.session)
@@ -133,12 +141,12 @@ router.get('/logout',(req,res)=>{
     });
   });
 })
-
-
-// ✅ PROTECTED ROUTE MIDDLEWARE
-// function isLoggedIn(req, res, next) {
-//   if (req.isAuthenticated()) return next();
-//   return res.status(401).json({ message: 'Unauthorized' });
-// }
-// ✅ Correct export
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next(); // user login hai → aage jao
+  }
+  else {
+    return res.status(401).json({ message: 'Unauthorized' }); // ← ye run ho raha hai
+  }
+}
 module.exports = router;
