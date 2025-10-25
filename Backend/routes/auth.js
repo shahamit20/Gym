@@ -21,13 +21,15 @@ router.post('/register', async (req, res) => {
   try {
     const userdata = new users({
       fullname: req.body.fullname,
-      username: req.body.email,
+      username: req.body.email,   // username = email
       email: req.body.email,
       age: req.body.age,
       gender: req.body.gender,
       fitnessGoal: req.body.fitnessGoal,
-      Workout:[]
+      calories: req.body.calories,
+      level: req.body.level
     });
+
     users.register(userdata, req.body.password, (err, registeredUser) => {
       if (err) {
         if (err.name === 'UserExistsError') {
@@ -48,6 +50,7 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 // // Login route
 router.post('/login', (req, res, next) => {

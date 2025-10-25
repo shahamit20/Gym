@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
     MapPin,
@@ -12,6 +13,7 @@ import {
     PlusCircle
 } from 'lucide-react';
 import Addgym from './Addgym';
+import View_gym from './gym view/View_gym';
 
 // const gymData = [
 //     {
@@ -45,6 +47,7 @@ import Addgym from './Addgym';
 // ];
 
 function Explore() {
+    const navigate = useNavigate();
     const [query, setQuery] = useState('');
     const [oncolse, setOncolse] = useState(false);
     const [gymData, setgymData] = useState([]);
@@ -77,6 +80,13 @@ function Explore() {
                 console.error('No data:', err);
             });
     }, []);
+
+
+    function gyminfo(selectedGym) {
+        console.log("Clicked Gym:", selectedGym);
+        navigate("/gympage", { state: { gym: selectedGym } });
+
+    }
 
 
 
@@ -116,13 +126,13 @@ function Explore() {
                         key={gym._id || index}
                         className="w-[25rem] h-auto border shadow-lg rounded-xl p-4 bg-white"
                         initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y:0 }}
+                        animate={{ opacity: 1, y: 0 }}
                         whileHover={{
                             scale: 1.03,
                             y: -5,
                             boxShadow: "0px 10px 20px rgba(0,0,0,0.2)",
                         }}
-                        transition={{ duration: 1.2, delay: index * 0.1, ease:'ease-in-out', type: 'spring' }}
+                        transition={{ duration: 1.2, delay: index * 0.1, ease: 'ease-in-out', type: 'spring' }}
                     >
                         <div className="w-full h-[10rem]  rounded-xl mb-4 p-1 flex justify-center items-center" >
                             <img className='w-[25rem] h-[9rem] rounded-lg' src={`http://localhost:3000/uploads/${gym.logo}`} alt="Gym Logo" />
@@ -131,9 +141,9 @@ function Explore() {
                             {gym.gymName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                         </h2>
                         <h3 className='text-lg text-gray-500'>{gym.gymowner
-                        .split(' ')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ')}</h3>
+                            .split(' ')
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                            .join(' ')}</h3>
                         <div className="flex items-center text-gray-600 text-sm mb-1">
                             <MapPin className="w-4 h-4 mr-1" />
                             {gym.Address}
@@ -147,16 +157,14 @@ function Explore() {
                         <div className="flex items-center text-gray-600 text-sm mb-1">
                             <p>{gym.desc}</p>
                         </div>
-                        {/* <div className="flex flex-wrap text-sm text-gray-600 mt-2 gap-3">
-                            {gym.features?.includes('Weight Training') && (
-                                <div className="flex items-center">
-                                    <Dumbbell className="w-4 h-4 mr-1" /> Weight Training
-                                </div>
-                            )}
-                        </div> */}
-                        <button className="mt-4 w-full bg-orange-600 text-white py-2 rounded-xl hover:bg-orange-700 transition">
-                            Join Now
-                        </button>
+                        <div className='flex justify-evenly gap-5'>
+                            <button onClick={() => gyminfo(gym)} className="mt-4 w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition">
+                                View the page
+                            </button>
+                            <button className="mt-4 w-full bg-orange-600 text-white py-2 rounded-xl hover:bg-orange-700 transition">
+                                Join Now
+                            </button>
+                        </div>
                     </motion.div>
                 ))}
                 {filteredGyms.length === 0 && (

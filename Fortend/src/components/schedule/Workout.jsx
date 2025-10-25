@@ -109,7 +109,7 @@ function Workout() {
                 </div>
                 {day === 'beginners' && <div><Beginners /></div>}
                 {day === 'intermediate' && <div><Intermediate /></div>}
-                {day === 'advance' && <div><Advance /></div>}8+
+                {day === 'advance' && <div><Advance /></div>}
             </div>
 
             <Ownplan />

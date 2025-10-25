@@ -5,17 +5,18 @@ import { useNavigate } from 'react-router-dom';
 export default function Register() {
   const navigate = useNavigate(); 
    const [formData, setFormData] = useState({
-    fullName: '',
+    fullname: '',
     email: '',
     password: '',
-    confirmPassword: '',
     age: '',
     gender: '',
-    fitnessGoal: ''
+    fitnessGoal: '',
+    calories:'',
+    level:''
   });
 
    const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value});
+setFormData({...formData, [e.target.name]: e.target.value});
   };
 
   const handleSubmit = async (e) => {
@@ -31,7 +32,9 @@ export default function Register() {
           password: formData.password,
           age: parseInt(formData.age),
           gender: formData.gender,
-          fitnessGoal: formData.fitnessGoal
+          fitnessGoal: formData.fitnessGoal,
+          calories:formData.calories,
+          level:formData.level
         })
       });
       
@@ -88,18 +91,7 @@ export default function Register() {
             </div>
 
             {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm mb-1">Password</label>
-              <input
-                type="password"
-                id="password"
-                name='password'
-                value={formData.password}
-                 onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full px-4 py-2 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </div>
+         
 
             {/* Age */}
             <div>
@@ -147,6 +139,47 @@ export default function Register() {
                 <option value="gain" className="text-black">Gain Muscle</option>
                 <option value="maintain" className="text-black">Maintain</option>
               </select>
+            </div>
+
+            <div>
+              <label htmlFor="calories" className="block text-sm mb-1">calories</label>
+              <input
+                type="number"
+                id="calories"
+                name='calories'
+                value={formData.calories}
+                 onChange={handleChange}
+                placeholder="e.g. 2500"
+                className="w-full px-4 py-2 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+            </div>
+            <div>
+              <label htmlFor="level"  className="block text-sm mb-1">Fitness level</label>
+              <select
+                id="level"
+                 onChange={handleChange}
+                name='level'
+                value={formData.level}
+                className="w-full px-4 py-2 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-green-400"
+              >
+                <option value="">Select</option>
+                <option value="beginner" className="text-black">Beginner</option>
+                <option value="intermediate" className="text-black">Intermediate</option>
+                <option value="advanced" className="text-black">Advanced</option>
+              </select>
+            </div>
+
+               <div>
+              <label htmlFor="password" className="block text-sm mb-1">Password</label>
+              <input
+                type="password"
+                id="password"
+                name='password'
+                value={formData.password}
+                 onChange={handleChange}
+                placeholder="••••••••"
+                className="w-full px-4 py-2 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
             </div>
 
             {/* Register Button */}

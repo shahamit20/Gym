@@ -12,6 +12,8 @@ import Minibar from './components/schedule/Minibar';
 import Workout from './components/schedule/Workout';
 import Diet from './components/schedule/Diet/Diet';
 import Athlete from './components/schedule/Athlete/Athlete';
+import View_gym from './components/gym/gym view/View_gym'
+import Membership from './components/schedule/Membership';
 
 function App() {
   const [data, setData] = useState(null);
@@ -48,6 +50,7 @@ function App() {
         <Route path="/schedule" element={<Minibar />}>
           <Route path="workout" element={<Workout />} />
           <Route path="dietplan" element={<Diet />} />
+          <Route path="member" element={<Membership />} />
           <Route path="athlete" element={<Athlete />} />
         </Route>
         <Route path="/Calories" element={<Calories />} />
@@ -55,6 +58,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<User />} />
         <Route path="/gym" element={<GymPage />} />
+        <Route path="/gympage" element={<View_gym />} />
       </Routes>
     </>
   );
